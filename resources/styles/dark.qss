@@ -1,0 +1,150 @@
+* {
+    color: #e7eaee;
+    font-family: "Segoe UI", "Inter", sans-serif;
+    font-size: 10.5pt;
+}
+
+QMainWindow {
+    background: #101214;
+}
+
+QStatusBar {
+    background: #14171a;
+    color: #9aa4af;
+    border-top: 1px solid #262c33;
+}
+
+QSplitter::handle {
+    background: #22272d;
+    width: 1px;
+}
+
+#sidebar {
+    background: #14171a;
+    border-right: 1px solid #262c33;
+}
+
+#content {
+    background: #101214;
+}
+
+#appTitle {
+    color: #ffffff;
+    font-size: 20pt;
+    font-weight: 700;
+}
+
+#pageTitle {
+    color: #ffffff;
+    font-size: 18pt;
+    font-weight: 700;
+}
+
+#sidebarSection,
+#sectionTitle {
+    color: #9aa4af;
+    font-size: 9.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+#projectList {
+    background: #181c20;
+    border: 1px solid #2b323a;
+    border-radius: 8px;
+    padding: 6px;
+    outline: 0;
+}
+
+#projectList::item {
+    border-radius: 6px;
+    color: #cfd5dd;
+    min-height: 34px;
+    padding: 8px 10px;
+}
+
+#projectList::item:selected {
+    background: #263640;
+    color: #ffffff;
+}
+
+#projectList::item:hover {
+    background: #22282f;
+}
+
+#detailsPanel,
+#logPanel {
+    background: #181c20;
+    border: 1px solid #2b323a;
+    border-radius: 8px;
+}
+
+#projectName {
+    color: #ffffff;
+    font-size: 17pt;
+    font-weight: 700;
+}
+
+#metadata {
+    color: #b7c0ca;
+}
+
+#changelogOutput,
+#logOutput {
+    background: #101316;
+    border: 1px solid #2b323a;
+    border-radius: 8px;
+    color: #dce2e8;
+    selection-background-color: #2d5f74;
+    padding: 10px;
+}
+
+#logOutput {
+    font-family: "Cascadia Mono", "Consolas", monospace;
+    font-size: 9.5pt;
+}
+
+QPushButton {
+    background: #22282f;
+    border: 1px solid #343d47;
+    border-radius: 7px;
+    color: #edf1f5;
+    font-weight: 600;
+    min-height: 34px;
+    padding: 7px 13px;
+}
+
+QPushButton:hover {
+    background: #2a323b;
+    border-color: #46515d;
+}
+
+QPushButton:pressed {
+    background: #1d2329;
+}
+
+QPushButton#primaryButton {
+    background: #26724f;
+    border-color: #339464;
+    color: #ffffff;
+}
+
+QPushButton#primaryButton:hover {
+    background: #2c815a;
+}
+
+QPushButton#accentButton {
+    background: #8a5a16;
+    border-color: #b4761d;
+    color: #ffffff;
+}
+
+QPushButton#accentButton:hover {
+    background: #9b671d;
+}
+
+#separator {
+    color: #2b323a;
+    background: #2b323a;
+    max-height: 1px;
+}
