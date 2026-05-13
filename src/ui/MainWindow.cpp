@@ -1,283 +1,99 @@
 #include "ui/MainWindow.h"
 
-#include <QDateTime>
-#include <QFrame>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QListWidget>
-#include <QPlainTextEdit>
-#include <QPushButton>
-#include <QSplitter>
+#include "ui/pages/DashboardPage.h"
+#include "ui/pages/ItchPage.h"
+#include "ui/pages/LogsPage.h"
+#include "ui/pages/ProjectsPage.h"
+#include "ui/pages/SettingsPage.h"
+#include "ui/pages/SteamPage.h"
+
 #include <QStatusBar>
-#include <QVBoxLayout>
+#include <QTabWidget>
 
-namespace {
-QLabel *createSectionTitle(const QString &text)
-{
-    auto *label = new QLabel(text);
-    label->setObjectName("sectionTitle");
-    return label;
-}
-
-QFrame *createSeparator()
-{
-    auto *separator = new QFrame;
-    separator->setFrameShape(QFrame::HLine);
-    separator->setObjectName("separator");
-    return separator;
-}
-
-QString formatDateTime(const QDateTime &dateTime)
-{
-    return dateTime.toLocalTime().toString("yyyy-MM-dd HH:mm");
-}
-}
+namespace l10n = localization;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    seedProjects();
     setupUi();
-    refreshProjectList();
-
-    if (!m_projects.isEmpty()) {
-        m_projectList->setCurrentRow(0);
-    }
+    connectPageLogs();
+    setLanguage(l10n::Language::English);
+    writeLog(l10n::translate(m_language, l10n::Text::AppStarted));
 }
 
 void MainWindow::setupUi()
 {
     setWindowTitle("GamePipeline");
-    resize(1180, 760);
+    resize(1220, 780);
     setMinimumSize(980, 620);
 
-    auto *splitter = new QSplitter(Qt::Horizontal, this);
-    splitter->setChildrenCollapsible(false);
-    splitter->addWidget(createSidebar());
-    splitter->addWidget(createProjectPanel());
-    splitter->setStretchFactor(0, 0);
-    splitter->setStretchFactor(1, 1);
-    splitter->setSizes({280, 900});
+    m_tabs = new QTabWidget(this);
+    m_tabs->setObjectName("mainTabs");
+    m_tabs->setDocumentMode(true);
 
-    setCentralWidget(splitter);
-    statusBar()->showMessage("Ready");
+    m_dashboardPage = new DashboardPage(this);
+    m_projectsPage = new ProjectsPage(this);
+    m_steamPage = new SteamPage(this);
+    m_itchPage = new ItchPage(this);
+    m_logsPage = new LogsPage(this);
+    m_settingsPage = new SettingsPage(this);
+
+    m_tabs->addTab(m_dashboardPage, {});
+    m_tabs->addTab(m_projectsPage, {});
+    m_tabs->addTab(m_steamPage, {});
+    m_tabs->addTab(m_itchPage, {});
+    m_tabs->addTab(m_logsPage, {});
+    m_tabs->addTab(m_settingsPage, {});
+
+    setCentralWidget(m_tabs);
 }
 
-QWidget *MainWindow::createSidebar()
+void MainWindow::connectPageLogs()
 {
-    auto *sidebar = new QWidget;
-    sidebar->setObjectName("sidebar");
-    sidebar->setMinimumWidth(250);
-
-    auto *layout = new QVBoxLayout(sidebar);
-    layout->setContentsMargins(20, 22, 20, 20);
-    layout->setSpacing(14);
-
-    auto *title = new QLabel("GamePipeline");
-    title->setObjectName("appTitle");
-    layout->addWidget(title);
-
-    auto *subtitle = new QLabel("Projects");
-    subtitle->setObjectName("sidebarSection");
-    layout->addWidget(subtitle);
-
-    m_projectList = new QListWidget;
-    m_projectList->setObjectName("projectList");
-    m_projectList->setAlternatingRowColors(false);
-    connect(m_projectList, &QListWidget::currentRowChanged, this, &MainWindow::showProject);
-    layout->addWidget(m_projectList, 1);
-
-    auto *newProjectButton = createActionButton("New Project", "primaryButton");
-    auto *openProjectButton = createActionButton("Open Folder");
-    layout->addWidget(newProjectButton);
-    layout->addWidget(openProjectButton);
-
-    connect(newProjectButton, &QPushButton::clicked, this, [this] {
-        appendLog("New project action queued.");
-    });
-    connect(openProjectButton, &QPushButton::clicked, this, [this] {
-        appendLog("Open folder action queued.");
-    });
-
-    return sidebar;
+    connect(m_dashboardPage, &DashboardPage::logRequested, this, &MainWindow::writeLog);
+    connect(m_projectsPage, &ProjectsPage::logRequested, this, &MainWindow::writeLog);
+    connect(m_steamPage, &SteamPage::logRequested, this, &MainWindow::writeLog);
+    connect(m_itchPage, &ItchPage::logRequested, this, &MainWindow::writeLog);
+    connect(m_settingsPage, &SettingsPage::logRequested, this, &MainWindow::writeLog);
+    connect(m_settingsPage, &SettingsPage::languageChanged, this, &MainWindow::setLanguage);
 }
 
-QWidget *MainWindow::createProjectPanel()
+void MainWindow::writeLog(const QString &message)
 {
-    auto *panel = new QWidget;
-    panel->setObjectName("content");
-
-    auto *layout = new QVBoxLayout(panel);
-    layout->setContentsMargins(26, 24, 26, 24);
-    layout->setSpacing(18);
-
-    auto *headerLayout = new QHBoxLayout;
-    headerLayout->setSpacing(12);
-
-    auto *heading = new QLabel("Project Workspace");
-    heading->setObjectName("pageTitle");
-    headerLayout->addWidget(heading, 1);
-
-    auto *selectBuildButton = createActionButton("Build Folder");
-    auto *steamUploadButton = createActionButton("Steam Upload", "primaryButton");
-    auto *itchUploadButton = createActionButton("itch.io Upload", "accentButton");
-
-    headerLayout->addWidget(selectBuildButton);
-    headerLayout->addWidget(steamUploadButton);
-    headerLayout->addWidget(itchUploadButton);
-    layout->addLayout(headerLayout);
-
-    connect(selectBuildButton, &QPushButton::clicked, this, [this] {
-        appendLog("Build folder selection queued.");
-    });
-    connect(steamUploadButton, &QPushButton::clicked, this, [this] {
-        appendLog("Steam upload action queued.");
-    });
-    connect(itchUploadButton, &QPushButton::clicked, this, [this] {
-        appendLog("itch.io upload action queued.");
-    });
-
-    auto *contentLayout = new QHBoxLayout;
-    contentLayout->setSpacing(18);
-    contentLayout->addWidget(createDetailsPanel(), 2);
-    contentLayout->addWidget(createLogPanel(), 1);
-    layout->addLayout(contentLayout, 1);
-
-    return panel;
-}
-
-QWidget *MainWindow::createDetailsPanel()
-{
-    auto *panel = new QWidget;
-    panel->setObjectName("detailsPanel");
-
-    auto *layout = new QVBoxLayout(panel);
-    layout->setContentsMargins(22, 22, 22, 22);
-    layout->setSpacing(12);
-
-    layout->addWidget(createSectionTitle("Overview"));
-
-    m_projectNameLabel = new QLabel;
-    m_projectNameLabel->setObjectName("projectName");
-    layout->addWidget(m_projectNameLabel);
-
-    m_projectRootLabel = new QLabel;
-    m_buildDirectoryLabel = new QLabel;
-    m_versionLabel = new QLabel;
-    m_targetsLabel = new QLabel;
-    m_lastUpdatedLabel = new QLabel;
-
-    for (auto *label : {m_projectRootLabel, m_buildDirectoryLabel, m_versionLabel, m_targetsLabel, m_lastUpdatedLabel}) {
-        label->setObjectName("metadata");
-        label->setWordWrap(true);
-        layout->addWidget(label);
+    if (m_logsPage) {
+        m_logsPage->appendMessage(message);
     }
 
-    layout->addWidget(createSeparator());
-    layout->addWidget(createSectionTitle("Changelog"));
-
-    m_changelogOutput = new QPlainTextEdit;
-    m_changelogOutput->setObjectName("changelogOutput");
-    m_changelogOutput->setReadOnly(true);
-    m_changelogOutput->setMinimumHeight(160);
-    layout->addWidget(m_changelogOutput);
-
-    layout->addWidget(createSeparator());
-    layout->addWidget(createSectionTitle("History"));
-
-    auto *history = new QLabel("No uploads have been recorded for this session.");
-    history->setObjectName("metadata");
-    history->setWordWrap(true);
-    layout->addWidget(history);
-    layout->addStretch(1);
-
-    return panel;
+    statusBar()->showMessage(message, 4000);
 }
 
-QWidget *MainWindow::createLogPanel()
+void MainWindow::setLanguage(localization::Language language)
 {
-    auto *panel = new QWidget;
-    panel->setObjectName("logPanel");
+    const bool changed = m_language != language;
+    m_language = language;
+    updateTexts();
 
-    auto *layout = new QVBoxLayout(panel);
-    layout->setContentsMargins(18, 18, 18, 18);
-    layout->setSpacing(12);
-
-    layout->addWidget(createSectionTitle("Log"));
-
-    m_logOutput = new QPlainTextEdit;
-    m_logOutput->setObjectName("logOutput");
-    m_logOutput->setReadOnly(true);
-    m_logOutput->setMinimumWidth(330);
-    layout->addWidget(m_logOutput, 1);
-
-    return panel;
-}
-
-QPushButton *MainWindow::createActionButton(const QString &text, const QString &objectName)
-{
-    auto *button = new QPushButton(text);
-    button->setCursor(Qt::PointingHandCursor);
-    if (!objectName.isEmpty()) {
-        button->setObjectName(objectName);
-    }
-    return button;
-}
-
-void MainWindow::seedProjects()
-{
-    const auto now = QDateTime::currentDateTime();
-    m_projects = {
-        GameProject("Starfall Tactics",
-                    "D:/Games/StarfallTactics",
-                    "D:/Games/StarfallTactics/Builds/Windows",
-                    "0.8.2",
-                    "- Rebalanced enemy wave timing\n- Added controller glyphs\n- Fixed save-game migration",
-                    {"Steam", "itch.io"},
-                    now.addDays(-1)),
-        GameProject("Neon Harbor",
-                    "D:/Games/NeonHarbor",
-                    "D:/Games/NeonHarbor/dist/win64",
-                    "1.1.0",
-                    "- New arena map\n- Updated localization files\n- Improved startup checks",
-                    {"itch.io"},
-                    now.addDays(-4)),
-    };
-}
-
-void MainWindow::refreshProjectList()
-{
-    m_projectList->clear();
-    for (const auto &project : m_projects) {
-        m_projectList->addItem(project.name());
+    if (changed) {
+        writeLog(l10n::translate(m_language, l10n::Text::LanguageChanged)
+                     .arg(l10n::languageName(m_language, m_language)));
     }
 }
 
-void MainWindow::showProject(int row)
+void MainWindow::updateTexts()
 {
-    if (row < 0 || row >= m_projects.size()) {
-        return;
-    }
+    m_tabs->setTabText(0, l10n::translate(m_language, l10n::Text::TabDashboard));
+    m_tabs->setTabText(1, l10n::translate(m_language, l10n::Text::TabProjects));
+    m_tabs->setTabText(2, l10n::translate(m_language, l10n::Text::TabSteam));
+    m_tabs->setTabText(3, l10n::translate(m_language, l10n::Text::TabItch));
+    m_tabs->setTabText(4, l10n::translate(m_language, l10n::Text::TabLogs));
+    m_tabs->setTabText(5, l10n::translate(m_language, l10n::Text::TabSettings));
 
-    const auto &project = m_projects.at(row);
-    m_projectNameLabel->setText(project.name());
-    m_projectRootLabel->setText("Project: " + project.projectRoot());
-    m_buildDirectoryLabel->setText("Build: " + project.buildDirectory());
-    m_versionLabel->setText("Version: " + project.version());
-    m_targetsLabel->setText("Targets: " + project.uploadTargets().join(", "));
-    m_lastUpdatedLabel->setText("Updated: " + formatDateTime(project.lastUpdated()));
-    m_changelogOutput->setPlainText(project.changelog());
-    statusBar()->showMessage(project.name());
+    m_dashboardPage->setLanguage(m_language);
+    m_projectsPage->setLanguage(m_language);
+    m_steamPage->setLanguage(m_language);
+    m_itchPage->setLanguage(m_language);
+    m_logsPage->setLanguage(m_language);
+    m_settingsPage->setLanguage(m_language);
 
-    appendLog("Selected project: " + project.name());
-}
-
-void MainWindow::appendLog(const QString &message)
-{
-    if (!m_logOutput) {
-        return;
-    }
-
-    const auto timestamp = QDateTime::currentDateTime().toString("HH:mm:ss");
-    m_logOutput->appendPlainText(QStringLiteral("[%1] %2").arg(timestamp, message));
+    statusBar()->showMessage(l10n::translate(m_language, l10n::Text::Ready));
 }

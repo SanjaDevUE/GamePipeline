@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.24)
 project(GamePipeline VERSION 0.1.0 LANGUAGES CXX)
 
+if (WIN32)
+    enable_language(RC)
+endif ()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -24,9 +28,31 @@ qt_add_executable(GamePipeline
         src/main.cpp
         src/domain/GameProject.cpp
         src/domain/GameProject.h
+        src/localization/Language.cpp
+        src/localization/Language.h
+        src/ui/pages/DashboardPage.cpp
+        src/ui/pages/DashboardPage.h
+        src/ui/pages/ItchPage.cpp
+        src/ui/pages/ItchPage.h
+        src/ui/pages/LogsPage.cpp
+        src/ui/pages/LogsPage.h
+        src/ui/pages/ProjectsPage.cpp
+        src/ui/pages/ProjectsPage.h
+        src/ui/pages/SettingsPage.cpp
+        src/ui/pages/SettingsPage.h
+        src/ui/pages/SteamPage.cpp
+        src/ui/pages/SteamPage.h
         src/ui/MainWindow.cpp
         src/ui/MainWindow.h
+        src/ui/widgets/LogPanel.cpp
+        src/ui/widgets/LogPanel.h
         resources/GamePipeline.qrc)
+
+if (WIN32)
+    target_sources(GamePipeline
+            PRIVATE
+            resources/GamePipeline.rc)
+endif ()
 
 target_include_directories(GamePipeline
         PRIVATE

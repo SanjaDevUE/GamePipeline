@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QIcon>
 
 namespace {
 void applyApplicationStyle(QApplication &application)
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("GamePipeline");
     QApplication::setOrganizationName("GamePipeline");
     QApplication::setApplicationVersion(GAMEPIPELINE_VERSION);
+    QApplication::setWindowIcon(QIcon(":/icons/app.ico"));
 
     applyApplicationStyle(application);
 

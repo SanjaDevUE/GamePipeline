@@ -4,7 +4,8 @@
     font-size: 10.5pt;
 }
 
-QMainWindow {
+QMainWindow,
+QWidget#page {
     background: #101214;
 }
 
@@ -14,94 +15,151 @@ QStatusBar {
     border-top: 1px solid #262c33;
 }
 
-QSplitter::handle {
-    background: #22272d;
-    width: 1px;
-}
-
-#sidebar {
-    background: #14171a;
-    border-right: 1px solid #262c33;
-}
-
-#content {
+QTabWidget#mainTabs::pane {
     background: #101214;
+    border: 0;
+    top: -1px;
 }
 
-#appTitle {
+QTabBar::tab {
+    background: #15191d;
+    border: 1px solid #252b32;
+    border-bottom-color: #2f363f;
+    color: #aeb8c2;
+    min-width: 112px;
+    min-height: 34px;
+    padding: 8px 16px;
+}
+
+QTabBar::tab:first {
+    border-top-left-radius: 7px;
+}
+
+QTabBar::tab:last {
+    border-top-right-radius: 7px;
+}
+
+QTabBar::tab:selected {
+    background: #1d2329;
+    border-color: #39434d;
+    color: #ffffff;
+}
+
+QTabBar::tab:hover {
+    background: #20272e;
+    color: #ffffff;
+}
+
+QLabel#pageTitle {
     color: #ffffff;
     font-size: 20pt;
     font-weight: 700;
 }
 
-#pageTitle {
-    color: #ffffff;
-    font-size: 18pt;
-    font-weight: 700;
-}
-
-#sidebarSection,
-#sectionTitle {
+QLabel#sectionTitle {
     color: #9aa4af;
     font-size: 9.5pt;
     font-weight: 700;
-    text-transform: uppercase;
 }
 
-#projectList {
+QLabel#projectName {
+    color: #ffffff;
+    font-size: 17pt;
+    font-weight: 700;
+}
+
+QLabel#metadata,
+QLabel#mutedText {
+    color: #b7c0ca;
+}
+
+QLabel#metricValue {
+    color: #ffffff;
+    font-size: 21pt;
+    font-weight: 700;
+}
+
+QWidget#panel,
+QWidget#logPanel,
+QWidget#metricCard {
     background: #181c20;
+    border: 1px solid #2b323a;
+    border-radius: 8px;
+}
+
+QWidget#metricCard {
+    min-height: 92px;
+}
+
+QListWidget#projectList {
+    background: #101316;
     border: 1px solid #2b323a;
     border-radius: 8px;
     padding: 6px;
     outline: 0;
 }
 
-#projectList::item {
+QListWidget#projectList::item {
     border-radius: 6px;
     color: #cfd5dd;
     min-height: 34px;
     padding: 8px 10px;
 }
 
-#projectList::item:selected {
+QListWidget#projectList::item:selected {
     background: #263640;
     color: #ffffff;
 }
 
-#projectList::item:hover {
+QListWidget#projectList::item:hover {
     background: #22282f;
 }
 
-#detailsPanel,
-#logPanel {
-    background: #181c20;
-    border: 1px solid #2b323a;
-    border-radius: 8px;
-}
-
-#projectName {
-    color: #ffffff;
-    font-size: 17pt;
-    font-weight: 700;
-}
-
-#metadata {
-    color: #b7c0ca;
-}
-
-#changelogOutput,
-#logOutput {
+QPlainTextEdit#changelogOutput,
+QPlainTextEdit#logOutput,
+QLineEdit,
+QComboBox {
     background: #101316;
     border: 1px solid #2b323a;
-    border-radius: 8px;
+    border-radius: 7px;
     color: #dce2e8;
+    padding: 9px 10px;
     selection-background-color: #2d5f74;
-    padding: 10px;
 }
 
-#logOutput {
+QPlainTextEdit#logOutput {
     font-family: "Cascadia Mono", "Consolas", monospace;
     font-size: 9.5pt;
+}
+
+QLineEdit:focus,
+QPlainTextEdit:focus,
+QComboBox:focus {
+    border-color: #487386;
+}
+
+QLineEdit::placeholder {
+    color: #6f7a84;
+}
+
+QComboBox::drop-down {
+    border: 0;
+    width: 28px;
+}
+
+QComboBox::down-arrow {
+    image: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #9aa4af;
+    margin-right: 10px;
+}
+
+QComboBox QAbstractItemView {
+    background: #181c20;
+    border: 1px solid #2b323a;
+    color: #e7eaee;
+    selection-background-color: #263640;
 }
 
 QPushButton {
@@ -143,8 +201,23 @@ QPushButton#accentButton:hover {
     background: #9b671d;
 }
 
-#separator {
-    color: #2b323a;
-    background: #2b323a;
-    max-height: 1px;
+QPushButton#secondaryButton {
+    min-width: 74px;
+}
+
+QCheckBox {
+    spacing: 8px;
+}
+
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid #46515d;
+    background: #101316;
+}
+
+QCheckBox::indicator:checked {
+    background: #26724f;
+    border-color: #339464;
 }

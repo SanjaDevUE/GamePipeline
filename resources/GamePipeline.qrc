@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>styles/dark.qss</file>
+        <file alias="icons/app.ico">../assets/GPlogo.ico</file>
     </qresource>
 </RCC>

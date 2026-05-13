@@ -1,15 +1,16 @@
 #pragma once
 
-#include "domain/GameProject.h"
+#include "localization/Language.h"
 
 #include <QMainWindow>
-#include <QVector>
 
-class QLabel;
-class QListWidget;
-class QPlainTextEdit;
-class QPushButton;
-class QWidget;
+class DashboardPage;
+class ItchPage;
+class LogsPage;
+class ProjectsPage;
+class SettingsPage;
+class SteamPage;
+class QTabWidget;
 
 class MainWindow final : public QMainWindow
 {
@@ -18,27 +19,21 @@ class MainWindow final : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
 
+private slots:
+    void writeLog(const QString &message);
+    void setLanguage(localization::Language language);
+
 private:
     void setupUi();
-    void seedProjects();
-    void refreshProjectList();
-    void showProject(int row);
-    void appendLog(const QString &message);
+    void connectPageLogs();
+    void updateTexts();
 
-    [[nodiscard]] QWidget *createSidebar();
-    [[nodiscard]] QWidget *createProjectPanel();
-    [[nodiscard]] QWidget *createDetailsPanel();
-    [[nodiscard]] QWidget *createLogPanel();
-    [[nodiscard]] QPushButton *createActionButton(const QString &text, const QString &objectName = {});
-
-    QVector<GameProject> m_projects;
-    QListWidget *m_projectList = nullptr;
-    QLabel *m_projectNameLabel = nullptr;
-    QLabel *m_projectRootLabel = nullptr;
-    QLabel *m_buildDirectoryLabel = nullptr;
-    QLabel *m_versionLabel = nullptr;
-    QLabel *m_targetsLabel = nullptr;
-    QLabel *m_lastUpdatedLabel = nullptr;
-    QPlainTextEdit *m_changelogOutput = nullptr;
-    QPlainTextEdit *m_logOutput = nullptr;
+    localization::Language m_language = localization::Language::English;
+    QTabWidget *m_tabs = nullptr;
+    DashboardPage *m_dashboardPage = nullptr;
+    ProjectsPage *m_projectsPage = nullptr;
+    SteamPage *m_steamPage = nullptr;
+    ItchPage *m_itchPage = nullptr;
+    LogsPage *m_logsPage = nullptr;
+    SettingsPage *m_settingsPage = nullptr;
 };
