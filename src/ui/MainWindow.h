@@ -7,6 +7,7 @@
 class DashboardPage;
 class ItchPage;
 class LogsPage;
+class ProjectRepository;
 class ProjectsPage;
 class SettingsPage;
 class SteamPage;
@@ -29,6 +30,7 @@ private:
     void updateTexts();
 
     localization::Language m_language = localization::Language::English;
+    ProjectRepository *m_projectRepository = nullptr;
     QTabWidget *m_tabs = nullptr;
     DashboardPage *m_dashboardPage = nullptr;
     ProjectsPage *m_projectsPage = nullptr;

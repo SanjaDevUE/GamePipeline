@@ -1,5 +1,6 @@
 #include "ui/MainWindow.h"
 
+#include "domain/ProjectRepository.h"
 #include "ui/pages/DashboardPage.h"
 #include "ui/pages/ItchPage.h"
 #include "ui/pages/LogsPage.h"
@@ -24,19 +25,25 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::setupUi()
 {
     setWindowTitle("GamePipeline");
-    resize(1220, 780);
-    setMinimumSize(980, 620);
+    resize(1280, 880);
+    setMinimumSize(1100, 740);
 
     m_tabs = new QTabWidget(this);
     m_tabs->setObjectName("mainTabs");
     m_tabs->setDocumentMode(true);
 
+    m_projectRepository = new ProjectRepository(this);
     m_dashboardPage = new DashboardPage(this);
-    m_projectsPage = new ProjectsPage(this);
-    m_steamPage = new SteamPage(this);
+    m_projectsPage = new ProjectsPage(m_projectRepository, this);
+    m_steamPage = new SteamPage(m_projectRepository, this);
     m_itchPage = new ItchPage(this);
     m_logsPage = new LogsPage(this);
     m_settingsPage = new SettingsPage(this);
+
+    connect(m_projectRepository, &ProjectRepository::projectsChanged, this, [this] {
+        m_dashboardPage->setProjectCount(m_projectRepository->projects().size());
+    });
+    m_dashboardPage->setProjectCount(m_projectRepository->projects().size());
 
     m_tabs->addTab(m_dashboardPage, {});
     m_tabs->addTab(m_projectsPage, {});

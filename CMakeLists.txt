@@ -28,6 +28,8 @@ qt_add_executable(GamePipeline
         src/main.cpp
         src/domain/GameProject.cpp
         src/domain/GameProject.h
+        src/domain/ProjectRepository.cpp
+        src/domain/ProjectRepository.h
         src/localization/Language.cpp
         src/localization/Language.h
         src/ui/pages/DashboardPage.cpp
@@ -86,6 +88,14 @@ if (WIN32)
                 COMMAND "${WINDEPLOYQT_EXECUTABLE}" --no-translations "$<TARGET_FILE:${PROJECT_NAME}>"
                 COMMENT "Deploying Qt runtime dependencies")
     endif ()
+endif ()
+
+if (EXISTS "${CMAKE_SOURCE_DIR}/Steam")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND "${CMAKE_COMMAND}" -E copy_directory
+            "${CMAKE_SOURCE_DIR}/Steam"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Steam"
+            COMMENT "Copying portable Steam tools")
 endif ()
 
 qt_finalize_executable(GamePipeline)
