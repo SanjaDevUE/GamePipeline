@@ -56,9 +56,8 @@ DashboardPage::DashboardPage(QWidget *parent)
     auto *summaryGrid = new QGridLayout;
     summaryGrid->setHorizontalSpacing(14);
     summaryGrid->setVerticalSpacing(14);
-    QLabel *managedProjectsValue = nullptr;
     QLabel *readyBuildsValue = nullptr;
-    summaryGrid->addWidget(createMetricCard(m_managedProjectsLabel, managedProjectsValue, "2"), 0, 0);
+    summaryGrid->addWidget(createMetricCard(m_managedProjectsLabel, m_managedProjectsValue, "0"), 0, 0);
     summaryGrid->addWidget(createMetricCard(m_readyBuildsLabel, readyBuildsValue, "0"), 0, 1);
     summaryGrid->addWidget(createMetricCard(m_steamUploadsLabel, m_steamPlaceholderLabel, {}), 0, 2);
     summaryGrid->addWidget(createMetricCard(m_itchUploadsLabel, m_itchPlaceholderLabel, {}), 0, 3);
@@ -110,6 +109,11 @@ void DashboardPage::setLanguage(localization::Language language)
 {
     m_language = language;
     updateTexts();
+}
+
+void DashboardPage::setProjectCount(int count)
+{
+    m_managedProjectsValue->setText(QString::number(count));
 }
 
 void DashboardPage::updateTexts()

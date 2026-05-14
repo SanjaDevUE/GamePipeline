@@ -3,6 +3,8 @@ cmake-build-*/
 build/
 out/
 dist/
+Steam/ContentBuilder/scripts/
+Steam/ContentBuilder/output/
 *.user
 *.suo
 *.tmp

@@ -69,19 +69,85 @@ QString translate(Language language, Text text)
         return german ? "Aktualisiert: %1" : "Updated: %1";
     case Text::Changelog:
         return german ? "Änderungsprotokoll" : "Changelog";
+    case Text::ProjectName:
+        return german ? "Projektname" : "Project name";
+    case Text::ProjectRoot:
+        return german ? "Projektordner" : "Project root";
+    case Text::BuildDirectory:
+        return german ? "Build-Ordner" : "Build directory";
+    case Text::UploadTargets:
+        return german ? "Upload-Ziele" : "Upload targets";
+    case Text::LastUpdated:
+        return german ? "Zuletzt gespeichert" : "Last saved";
+    case Text::DeleteProject:
+        return german ? "Projekt löschen" : "Delete Project";
+    case Text::NoProjects:
+        return german ? "Noch keine Projekte gespeichert." : "No projects saved yet.";
+    case Text::Project:
+        return german ? "Projekt" : "Project";
+    case Text::Browse:
+        return german ? "Durchsuchen" : "Browse";
 
     case Text::SteamTitle:
         return "Steam";
+    case Text::SteamProject:
+        return german ? "Steam-Projekt" : "Steam Project";
     case Text::SteamCmdPlaceholder:
         return german ? "SteamCMD-Platzhalter" : "SteamCMD Placeholder";
     case Text::SteamCmdPath:
         return german ? "SteamCMD-Pfad" : "SteamCMD path";
+    case Text::ContentBuilderPath:
+        return german ? "Steamworks SDK ContentBuilder-Pfad" : "Steamworks SDK ContentBuilder path";
     case Text::AppId:
         return german ? "App-ID" : "App ID";
     case Text::DepotId:
         return german ? "Depot-ID" : "Depot ID";
+    case Text::BuildPath:
+        return german ? "Build-Pfad" : "Build path";
     case Text::BuildDescription:
         return german ? "Build-Beschreibung" : "Build description";
+    case Text::DepotConfiguration:
+        return german ? "Depot-Konfiguration" : "Depot Configuration";
+    case Text::SteamConfiguration:
+        return german ? "Steam-Konfiguration" : "Steam Configuration";
+    case Text::Branch:
+        return german ? "Live-Branch" : "Live branch";
+    case Text::PreviewBuild:
+        return german ? "Preview-Build" : "Preview build";
+    case Text::AddDepot:
+        return german ? "Depot hinzufügen" : "Add Depot";
+    case Text::RemoveDepot:
+        return german ? "Depot entfernen" : "Remove Depot";
+    case Text::SteamLogin:
+        return german ? "Steam-Login" : "Steam login";
+    case Text::SteamPassword:
+        return german ? "Steam-Passwort" : "Steam password";
+    case Text::ShowPassword:
+        return german ? "Passwort anzeigen" : "Show Password";
+    case Text::SavePassword:
+        return german ? "Passwort speichern" : "Save Password";
+    case Text::ViewLogsFolder:
+        return german ? "Log-Ordner öffnen" : "View Logs Folder";
+    case Text::SteamProgressReady:
+        return german ? "Bereit" : "Ready";
+    case Text::SteamProgressValidating:
+        return german ? "Konfiguration prüfen" : "Validating config";
+    case Text::SteamProgressValidated:
+        return german ? "Konfiguration gültig" : "Config valid";
+    case Text::SteamProgressSaving:
+        return german ? "Projekt speichern" : "Saving project";
+    case Text::SteamProgressSaved:
+        return german ? "Projekt gespeichert" : "Project saved";
+    case Text::SteamProgressGenerating:
+        return german ? "VDF-Dateien erzeugen" : "Generating VDF files";
+    case Text::SteamProgressGenerated:
+        return german ? "VDF-Dateien erzeugt" : "VDF files generated";
+    case Text::SteamProgressUploading:
+        return german ? "Steam-Upload läuft" : "Steam upload running";
+    case Text::SteamProgressComplete:
+        return german ? "Abgeschlossen" : "Complete";
+    case Text::SteamProgressFailed:
+        return german ? "Fehlgeschlagen" : "Failed";
     case Text::ValidateConfig:
         return german ? "Konfiguration prüfen" : "Validate Config";
     case Text::GenerateVdf:
@@ -146,22 +212,46 @@ QString translate(Language language, Text text)
         return german ? "Projekte: Platzhalter für neues Projekt geklickt."
                       : "Projects: new project placeholder clicked.";
     case Text::LogProjectsBuildFolder:
-        return german ? "Projekte: Platzhalter für Build-Ordner-Auswahl geklickt."
-                      : "Projects: build folder selection placeholder clicked.";
+        return german ? "Projekte: Build-Ordner ausgewählt."
+                      : "Projects: build folder selected.";
     case Text::LogProjectsSave:
-        return german ? "Projekte: Platzhalter für Speichern der Einstellungen geklickt."
-                      : "Projects: settings save placeholder clicked.";
+        return german ? "Projekte: %1 gespeichert."
+                      : "Projects: saved %1.";
     case Text::LogProjectsSelected:
         return german ? "Projekte: %1 ausgewählt." : "Projects: selected %1.";
+    case Text::LogProjectsCreated:
+        return german ? "Projekte: Neues Projekt angelegt." : "Projects: created new project.";
+    case Text::LogProjectsDeleted:
+        return german ? "Projekte: %1 gelöscht." : "Projects: deleted %1.";
+    case Text::LogProjectsNoProjectSelected:
+        return german ? "Projekte: Kein Projekt ausgewählt." : "Projects: no project selected.";
+    case Text::LogSteamProjectSaved:
+        return german ? "Steam: Projektkonfiguration für %1 gespeichert."
+                      : "Steam: saved project configuration for %1.";
+    case Text::LogSteamNoProjectSelected:
+        return german ? "Steam: Kein Projekt ausgewählt." : "Steam: no project selected.";
     case Text::LogSteamValidate:
-        return german ? "Steam: Platzhalter für Konfigurationsprüfung geklickt."
-                      : "Steam: validate config placeholder clicked.";
+        return german ? "Steam: Konfiguration geprüft."
+                      : "Steam: validated config.";
     case Text::LogSteamGenerateVdf:
-        return german ? "Steam: Platzhalter für VDF-Erzeugung geklickt."
-                      : "Steam: VDF generation placeholder clicked.";
+        return german ? "Steam: VDF-Erzeugung gestartet."
+                      : "Steam: VDF generation started.";
+    case Text::LogSteamVdfGenerated:
+        return german ? "Steam: VDF-Dateien in %1 erzeugt." : "Steam: generated VDF files in %1.";
     case Text::LogSteamUpload:
-        return german ? "Steam: Upload-Platzhalter geklickt."
-                      : "Steam: upload placeholder clicked.";
+        return german ? "Steam: Upload vorbereitet."
+                      : "Steam: upload prepared.";
+    case Text::LogSteamUploadStarted:
+        return german ? "Steam: Upload gestartet." : "Steam: upload started.";
+    case Text::LogSteamUploadFinished:
+        return german ? "Steam: Upload beendet." : "Steam: upload finished.";
+    case Text::LogSteamUploadFailed:
+        return german ? "Steam: Upload konnte nicht gestartet werden: %1"
+                      : "Steam: upload could not be started: %1";
+    case Text::LogSteamDepotAdded:
+        return german ? "Steam: Depot hinzugefügt." : "Steam: depot added.";
+    case Text::LogSteamDepotRemoved:
+        return german ? "Steam: Depot entfernt." : "Steam: depot removed.";
     case Text::LogItchValidate:
         return german ? "itch.io: Platzhalter für Konfigurationsprüfung geklickt."
                       : "itch.io: validate config placeholder clicked.";

@@ -14,6 +14,7 @@ class DashboardPage final : public QWidget
 public:
     explicit DashboardPage(QWidget *parent = nullptr);
     void setLanguage(localization::Language language);
+    void setProjectCount(int count);
 
 signals:
     void logRequested(const QString &message);
@@ -23,6 +24,7 @@ private:
 
     localization::Language m_language = localization::Language::English;
     QLabel *m_titleLabel = nullptr;
+    QLabel *m_managedProjectsValue = nullptr;
     QLabel *m_managedProjectsLabel = nullptr;
     QLabel *m_readyBuildsLabel = nullptr;
     QLabel *m_steamUploadsLabel = nullptr;

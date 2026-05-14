@@ -62,6 +62,12 @@ QLabel#sectionTitle {
     font-weight: 700;
 }
 
+QLabel#fieldLabel {
+    color: #b7c0ca;
+    font-size: 9.5pt;
+    font-weight: 600;
+}
+
 QLabel#projectName {
     color: #ffffff;
     font-size: 17pt;
@@ -82,8 +88,8 @@ QLabel#metricValue {
 QWidget#panel,
 QWidget#logPanel,
 QWidget#metricCard {
-    background: #181c20;
-    border: 1px solid #2b323a;
+    background: #15191d;
+    border: 1px solid #303842;
     border-radius: 8px;
 }
 
@@ -115,21 +121,79 @@ QListWidget#projectList::item:hover {
     background: #22282f;
 }
 
+QTableWidget#depotTable {
+    background: #12161a;
+    alternate-background-color: #151a1f;
+    border: 1px solid #34404a;
+    border-radius: 8px;
+    color: #dce2e8;
+    gridline-color: #34404a;
+    outline: 0;
+    selection-background-color: #263640;
+}
+
+QTableWidget#depotTable::item {
+    padding: 4px 9px;
+}
+
+QTableWidget#depotTable QLineEdit {
+    border-radius: 5px;
+    min-height: 24px;
+    padding: 4px 8px;
+}
+
+QHeaderView::section {
+    background: #182027;
+    border: 0;
+    border-bottom: 1px solid #34404a;
+    color: #b7c0ca;
+    font-weight: 700;
+    padding: 8px 10px;
+}
+
 QPlainTextEdit#changelogOutput,
 QPlainTextEdit#logOutput,
 QLineEdit,
 QComboBox {
-    background: #101316;
-    border: 1px solid #2b323a;
+    background: #12161a;
+    border: 1px solid #34404a;
     border-radius: 7px;
     color: #dce2e8;
-    padding: 9px 10px;
+    padding: 7px 10px;
     selection-background-color: #2d5f74;
+}
+
+QLineEdit,
+QComboBox {
+    min-height: 28px;
 }
 
 QPlainTextEdit#logOutput {
     font-family: "Cascadia Mono", "Consolas", monospace;
     font-size: 9.5pt;
+}
+
+QProgressBar#steamProgressBar {
+    background: #101316;
+    border: 1px solid #2b323a;
+    border-radius: 7px;
+    color: #edf1f5;
+    font-weight: 700;
+    min-height: 28px;
+    text-align: center;
+}
+
+QProgressBar#steamProgressBar::chunk {
+    background: #26724f;
+    border-radius: 6px;
+}
+
+QProgressBar#steamProgressBar[state="complete"]::chunk {
+    background: #339464;
+}
+
+QProgressBar#steamProgressBar[state="error"]::chunk {
+    background: #934141;
 }
 
 QLineEdit:focus,
@@ -203,6 +267,44 @@ QPushButton#accentButton:hover {
 
 QPushButton#secondaryButton {
     min-width: 74px;
+}
+
+QPushButton#iconButton {
+    background: #1d2329;
+    border-color: #343d47;
+    border-radius: 6px;
+    font-size: 13pt;
+    font-weight: 700;
+    min-height: 28px;
+    min-width: 32px;
+    padding: 0;
+}
+
+QPushButton#iconButton:hover {
+    background: #263039;
+    border-color: #4b5865;
+}
+
+QPushButton#dangerButton {
+    background: #6f2d2d;
+    border-color: #934141;
+    color: #ffffff;
+}
+
+QPushButton#dangerButton:hover {
+    background: #7f3636;
+}
+
+QPushButton:disabled,
+QLineEdit:disabled,
+QPlainTextEdit:disabled,
+QComboBox:disabled,
+QTableWidget:disabled,
+QProgressBar:disabled,
+QCheckBox:disabled {
+    color: #68727c;
+    background: #15191d;
+    border-color: #252b32;
 }
 
 QCheckBox {
