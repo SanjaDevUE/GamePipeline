@@ -196,7 +196,7 @@ ProjectsPage::ProjectsPage(ProjectRepository *repository, QWidget *parent)
     m_projectRootEdit = createInput("D:/Games/ArcadeShooter");
     m_buildDirectoryEdit = createInput("D:/Games/ArcadeShooter/Builds/Windows");
     m_versionEdit = createInput("0.1.0");
-    m_targetsEdit = createInput("Steam, itch.io");
+    m_targetsEdit = createInput("Steam");
 
     form->addRow(m_projectNameLabel, m_projectNameEdit);
     form->addRow(m_projectRootLabel, m_projectRootEdit);

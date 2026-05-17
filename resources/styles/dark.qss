@@ -68,33 +68,16 @@ QLabel#fieldLabel {
     font-weight: 600;
 }
 
-QLabel#projectName {
-    color: #ffffff;
-    font-size: 17pt;
-    font-weight: 700;
-}
-
 QLabel#metadata,
 QLabel#mutedText {
     color: #b7c0ca;
 }
 
-QLabel#metricValue {
-    color: #ffffff;
-    font-size: 21pt;
-    font-weight: 700;
-}
-
 QWidget#panel,
-QWidget#logPanel,
-QWidget#metricCard {
+QWidget#logPanel {
     background: #15191d;
     border: 1px solid #303842;
     border-radius: 8px;
-}
-
-QWidget#metricCard {
-    min-height: 92px;
 }
 
 QListWidget#projectList {
@@ -173,8 +156,7 @@ QPlainTextEdit#logOutput {
     font-size: 9.5pt;
 }
 
-QProgressBar#steamProgressBar,
-QProgressBar#unrealProgressBar {
+QProgressBar#steamProgressBar {
     background: #101316;
     border: 1px solid #2b323a;
     border-radius: 7px;
@@ -184,19 +166,16 @@ QProgressBar#unrealProgressBar {
     text-align: center;
 }
 
-QProgressBar#steamProgressBar::chunk,
-QProgressBar#unrealProgressBar::chunk {
+QProgressBar#steamProgressBar::chunk {
     background: #26724f;
     border-radius: 6px;
 }
 
-QProgressBar#steamProgressBar[state="complete"]::chunk,
-QProgressBar#unrealProgressBar[state="complete"]::chunk {
+QProgressBar#steamProgressBar[state="complete"]::chunk {
     background: #339464;
 }
 
-QProgressBar#steamProgressBar[state="error"]::chunk,
-QProgressBar#unrealProgressBar[state="error"]::chunk {
+QProgressBar#steamProgressBar[state="error"]::chunk {
     background: #934141;
 }
 
@@ -257,16 +236,6 @@ QPushButton#primaryButton {
 
 QPushButton#primaryButton:hover {
     background: #2c815a;
-}
-
-QPushButton#accentButton {
-    background: #8a5a16;
-    border-color: #b4761d;
-    color: #ffffff;
-}
-
-QPushButton#accentButton:hover {
-    background: #9b671d;
 }
 
 QPushButton#secondaryButton {
