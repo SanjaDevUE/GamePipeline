@@ -7,6 +7,7 @@
 #include "ui/pages/ProjectsPage.h"
 #include "ui/pages/SettingsPage.h"
 #include "ui/pages/SteamPage.h"
+#include "ui/pages/UnrealPage.h"
 
 #include <QStatusBar>
 #include <QTabWidget>
@@ -35,6 +36,7 @@ void MainWindow::setupUi()
     m_projectRepository = new ProjectRepository(this);
     m_dashboardPage = new DashboardPage(this);
     m_projectsPage = new ProjectsPage(m_projectRepository, this);
+    m_unrealPage = new UnrealPage(m_projectRepository, this);
     m_steamPage = new SteamPage(m_projectRepository, this);
     m_itchPage = new ItchPage(this);
     m_logsPage = new LogsPage(this);
@@ -47,6 +49,7 @@ void MainWindow::setupUi()
 
     m_tabs->addTab(m_dashboardPage, {});
     m_tabs->addTab(m_projectsPage, {});
+    m_tabs->addTab(m_unrealPage, {});
     m_tabs->addTab(m_steamPage, {});
     m_tabs->addTab(m_itchPage, {});
     m_tabs->addTab(m_logsPage, {});
@@ -59,6 +62,7 @@ void MainWindow::connectPageLogs()
 {
     connect(m_dashboardPage, &DashboardPage::logRequested, this, &MainWindow::writeLog);
     connect(m_projectsPage, &ProjectsPage::logRequested, this, &MainWindow::writeLog);
+    connect(m_unrealPage, &UnrealPage::logRequested, this, &MainWindow::writeLog);
     connect(m_steamPage, &SteamPage::logRequested, this, &MainWindow::writeLog);
     connect(m_itchPage, &ItchPage::logRequested, this, &MainWindow::writeLog);
     connect(m_settingsPage, &SettingsPage::logRequested, this, &MainWindow::writeLog);
@@ -90,13 +94,15 @@ void MainWindow::updateTexts()
 {
     m_tabs->setTabText(0, l10n::translate(m_language, l10n::Text::TabDashboard));
     m_tabs->setTabText(1, l10n::translate(m_language, l10n::Text::TabProjects));
-    m_tabs->setTabText(2, l10n::translate(m_language, l10n::Text::TabSteam));
-    m_tabs->setTabText(3, l10n::translate(m_language, l10n::Text::TabItch));
-    m_tabs->setTabText(4, l10n::translate(m_language, l10n::Text::TabLogs));
-    m_tabs->setTabText(5, l10n::translate(m_language, l10n::Text::TabSettings));
+    m_tabs->setTabText(2, l10n::translate(m_language, l10n::Text::TabUnreal));
+    m_tabs->setTabText(3, l10n::translate(m_language, l10n::Text::TabSteam));
+    m_tabs->setTabText(4, l10n::translate(m_language, l10n::Text::TabItch));
+    m_tabs->setTabText(5, l10n::translate(m_language, l10n::Text::TabLogs));
+    m_tabs->setTabText(6, l10n::translate(m_language, l10n::Text::TabSettings));
 
     m_dashboardPage->setLanguage(m_language);
     m_projectsPage->setLanguage(m_language);
+    m_unrealPage->setLanguage(m_language);
     m_steamPage->setLanguage(m_language);
     m_itchPage->setLanguage(m_language);
     m_logsPage->setLanguage(m_language);

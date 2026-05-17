@@ -12,6 +12,7 @@ class ProjectsPage;
 class SettingsPage;
 class SteamPage;
 class QTabWidget;
+class UnrealPage;
 
 class MainWindow final : public QMainWindow
 {
@@ -34,6 +35,7 @@ private:
     QTabWidget *m_tabs = nullptr;
     DashboardPage *m_dashboardPage = nullptr;
     ProjectsPage *m_projectsPage = nullptr;
+    UnrealPage *m_unrealPage = nullptr;
     SteamPage *m_steamPage = nullptr;
     ItchPage *m_itchPage = nullptr;
     LogsPage *m_logsPage = nullptr;

@@ -12,6 +12,12 @@ GamePipeline is a Windows-first Qt6 desktop application for game developers that
 - CMake
 - Ninja / CLion
 
+## Features
+
+- Project management with saved build and deployment settings
+- SteamPipe VDF generation and SteamCMD upload workflow
+- Unreal Engine packaging through RunUAT BuildCookRun
+
 ## Project Layout
 
 ```text
@@ -30,7 +36,6 @@ resources/
 - Branch and depot management
 - Version tracking
 - Changelog editor
-- Unreal Engine packaging support
 - Upload history and logs
 - Discord webhook notifications
 - Multi-platform deployment

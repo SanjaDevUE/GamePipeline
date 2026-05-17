@@ -17,6 +17,8 @@ QString translate(Language language, Text text)
         return german ? "Dashboard" : "Dashboard";
     case Text::TabProjects:
         return german ? "Projekte" : "Projects";
+    case Text::TabUnreal:
+        return "Unreal";
     case Text::TabSteam:
         return "Steam";
     case Text::TabItch:
@@ -155,6 +157,59 @@ QString translate(Language language, Text text)
     case Text::UploadToSteam:
         return german ? "Zu Steam hochladen" : "Upload to Steam";
 
+    case Text::UnrealTitle:
+        return "Unreal Engine";
+    case Text::UnrealConfiguration:
+        return german ? "Unreal-Konfiguration" : "Unreal Configuration";
+    case Text::UnrealEnginePath:
+        return german ? "Unreal-Engine-Pfad" : "Unreal Engine path";
+    case Text::UnrealProjectFile:
+        return german ? "Unreal-Projektdatei" : "Unreal project file";
+    case Text::UnrealArchiveDirectory:
+        return german ? "Paket-Ausgabeordner" : "Package output folder";
+    case Text::UnrealPlatform:
+        return german ? "Zielplattform" : "Target platform";
+    case Text::UnrealBuildConfiguration:
+        return german ? "Build-Konfiguration" : "Build configuration";
+    case Text::UnrealBuildOptions:
+        return german ? "Packaging-Optionen" : "Packaging Options";
+    case Text::UnrealAdditionalArguments:
+        return german ? "Zusaetzliche Argumente" : "Additional arguments";
+    case Text::UnrealBuild:
+        return "Build";
+    case Text::UnrealCook:
+        return "Cook";
+    case Text::UnrealStage:
+        return "Stage";
+    case Text::UnrealPak:
+        return "Pak";
+    case Text::UnrealArchive:
+        return "Archive";
+    case Text::UnrealClean:
+        return "Clean";
+    case Text::UnrealDistribution:
+        return "Distribution";
+    case Text::UnrealPackageProject:
+        return german ? "Projekt paketieren" : "Package Project";
+    case Text::UnrealOpenArchiveFolder:
+        return german ? "Ausgabeordner oeffnen" : "Open Output Folder";
+    case Text::UnrealProgressReady:
+        return german ? "Bereit" : "Ready";
+    case Text::UnrealProgressValidating:
+        return german ? "Konfiguration pruefen" : "Validating config";
+    case Text::UnrealProgressValidated:
+        return german ? "Konfiguration gueltig" : "Config valid";
+    case Text::UnrealProgressSaving:
+        return german ? "Projekt speichern" : "Saving project";
+    case Text::UnrealProgressSaved:
+        return german ? "Projekt gespeichert" : "Project saved";
+    case Text::UnrealProgressPackaging:
+        return german ? "Unreal-Packaging laeuft" : "Unreal packaging running";
+    case Text::UnrealProgressComplete:
+        return german ? "Abgeschlossen" : "Complete";
+    case Text::UnrealProgressFailed:
+        return german ? "Fehlgeschlagen" : "Failed";
+
     case Text::ItchTitle:
         return "itch.io";
     case Text::ButlerPlaceholder:
@@ -252,6 +307,19 @@ QString translate(Language language, Text text)
         return german ? "Steam: Depot hinzugefügt." : "Steam: depot added.";
     case Text::LogSteamDepotRemoved:
         return german ? "Steam: Depot entfernt." : "Steam: depot removed.";
+    case Text::LogUnrealProjectSaved:
+        return german ? "Unreal: Projektkonfiguration fuer %1 gespeichert."
+                      : "Unreal: saved project configuration for %1.";
+    case Text::LogUnrealValidate:
+        return german ? "Unreal: Konfiguration geprueft."
+                      : "Unreal: validated config.";
+    case Text::LogUnrealPackageStarted:
+        return german ? "Unreal: Packaging gestartet." : "Unreal: packaging started.";
+    case Text::LogUnrealPackageFinished:
+        return german ? "Unreal: Packaging beendet." : "Unreal: packaging finished.";
+    case Text::LogUnrealPackageFailed:
+        return german ? "Unreal: Packaging konnte nicht gestartet werden: %1"
+                      : "Unreal: packaging could not be started: %1";
     case Text::LogItchValidate:
         return german ? "itch.io: Platzhalter für Konfigurationsprüfung geklickt."
                       : "itch.io: validate config placeholder clicked.";
