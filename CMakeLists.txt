@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(GamePipeline VERSION 0.3.0 LANGUAGES CXX)
+project(GamePipeline VERSION 0.4.0 LANGUAGES CXX)
 
 if (WIN32)
     enable_language(RC)
