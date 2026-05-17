@@ -99,6 +99,71 @@ bool GameProject::steamPreviewBuild() const
     return m_steamPreviewBuild;
 }
 
+const QString &GameProject::unrealEnginePath() const
+{
+    return m_unrealEnginePath;
+}
+
+const QString &GameProject::unrealProjectPath() const
+{
+    return m_unrealProjectPath;
+}
+
+const QString &GameProject::unrealArchiveDirectory() const
+{
+    return m_unrealArchiveDirectory;
+}
+
+const QString &GameProject::unrealPlatform() const
+{
+    return m_unrealPlatform;
+}
+
+const QString &GameProject::unrealConfiguration() const
+{
+    return m_unrealConfiguration;
+}
+
+const QString &GameProject::unrealAdditionalArguments() const
+{
+    return m_unrealAdditionalArguments;
+}
+
+bool GameProject::unrealBuild() const
+{
+    return m_unrealBuild;
+}
+
+bool GameProject::unrealCook() const
+{
+    return m_unrealCook;
+}
+
+bool GameProject::unrealStage() const
+{
+    return m_unrealStage;
+}
+
+bool GameProject::unrealPak() const
+{
+    return m_unrealPak;
+}
+
+bool GameProject::unrealArchive() const
+{
+    return m_unrealArchive;
+}
+
+bool GameProject::unrealClean() const
+{
+    return m_unrealClean;
+}
+
+bool GameProject::unrealDistribution() const
+{
+    return m_unrealDistribution;
+}
+
 void GameProject::setName(QString name)
 {
     m_name = std::move(name);
@@ -177,4 +242,69 @@ void GameProject::setSteamSavePassword(bool steamSavePassword)
 void GameProject::setSteamPreviewBuild(bool steamPreviewBuild)
 {
     m_steamPreviewBuild = steamPreviewBuild;
+}
+
+void GameProject::setUnrealEnginePath(QString unrealEnginePath)
+{
+    m_unrealEnginePath = std::move(unrealEnginePath);
+}
+
+void GameProject::setUnrealProjectPath(QString unrealProjectPath)
+{
+    m_unrealProjectPath = std::move(unrealProjectPath);
+}
+
+void GameProject::setUnrealArchiveDirectory(QString unrealArchiveDirectory)
+{
+    m_unrealArchiveDirectory = std::move(unrealArchiveDirectory);
+}
+
+void GameProject::setUnrealPlatform(QString unrealPlatform)
+{
+    m_unrealPlatform = std::move(unrealPlatform);
+}
+
+void GameProject::setUnrealConfiguration(QString unrealConfiguration)
+{
+    m_unrealConfiguration = std::move(unrealConfiguration);
+}
+
+void GameProject::setUnrealAdditionalArguments(QString unrealAdditionalArguments)
+{
+    m_unrealAdditionalArguments = std::move(unrealAdditionalArguments);
+}
+
+void GameProject::setUnrealBuild(bool unrealBuild)
+{
+    m_unrealBuild = unrealBuild;
+}
+
+void GameProject::setUnrealCook(bool unrealCook)
+{
+    m_unrealCook = unrealCook;
+}
+
+void GameProject::setUnrealStage(bool unrealStage)
+{
+    m_unrealStage = unrealStage;
+}
+
+void GameProject::setUnrealPak(bool unrealPak)
+{
+    m_unrealPak = unrealPak;
+}
+
+void GameProject::setUnrealArchive(bool unrealArchive)
+{
+    m_unrealArchive = unrealArchive;
+}
+
+void GameProject::setUnrealClean(bool unrealClean)
+{
+    m_unrealClean = unrealClean;
+}
+
+void GameProject::setUnrealDistribution(bool unrealDistribution)
+{
+    m_unrealDistribution = unrealDistribution;
 }

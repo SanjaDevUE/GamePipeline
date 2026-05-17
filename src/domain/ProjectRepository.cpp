@@ -102,6 +102,21 @@ GameProject projectFromJson(const QJsonObject &object)
     project.setSteamPassword(project.steamSavePassword() ? steam.value("password").toString() : QString{});
     project.setSteamPreviewBuild(steam.value("previewBuild").toBool(false));
 
+    const auto unreal = object.value("unreal").toObject();
+    project.setUnrealEnginePath(unreal.value("enginePath").toString());
+    project.setUnrealProjectPath(unreal.value("projectPath").toString());
+    project.setUnrealArchiveDirectory(unreal.value("archiveDirectory").toString());
+    project.setUnrealPlatform(unreal.value("platform").toString(QStringLiteral("Win64")));
+    project.setUnrealConfiguration(unreal.value("configuration").toString(QStringLiteral("Development")));
+    project.setUnrealAdditionalArguments(unreal.value("additionalArguments").toString());
+    project.setUnrealBuild(unreal.value("build").toBool(true));
+    project.setUnrealCook(unreal.value("cook").toBool(true));
+    project.setUnrealStage(unreal.value("stage").toBool(true));
+    project.setUnrealPak(unreal.value("pak").toBool(true));
+    project.setUnrealArchive(unreal.value("archive").toBool(true));
+    project.setUnrealClean(unreal.value("clean").toBool(false));
+    project.setUnrealDistribution(unreal.value("distribution").toBool(false));
+
     return project;
 }
 
@@ -127,6 +142,22 @@ QJsonObject projectToJson(const GameProject &project)
     steam.insert("password", project.steamSavePassword() ? project.steamPassword() : QString{});
     steam.insert("previewBuild", project.steamPreviewBuild());
     object.insert("steam", steam);
+
+    QJsonObject unreal;
+    unreal.insert("enginePath", project.unrealEnginePath());
+    unreal.insert("projectPath", project.unrealProjectPath());
+    unreal.insert("archiveDirectory", project.unrealArchiveDirectory());
+    unreal.insert("platform", project.unrealPlatform());
+    unreal.insert("configuration", project.unrealConfiguration());
+    unreal.insert("additionalArguments", project.unrealAdditionalArguments());
+    unreal.insert("build", project.unrealBuild());
+    unreal.insert("cook", project.unrealCook());
+    unreal.insert("stage", project.unrealStage());
+    unreal.insert("pak", project.unrealPak());
+    unreal.insert("archive", project.unrealArchive());
+    unreal.insert("clean", project.unrealClean());
+    unreal.insert("distribution", project.unrealDistribution());
+    object.insert("unreal", unreal);
 
     return object;
 }

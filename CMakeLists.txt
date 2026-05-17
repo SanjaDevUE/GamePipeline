@@ -44,6 +44,8 @@ qt_add_executable(GamePipeline
         src/ui/pages/SettingsPage.h
         src/ui/pages/SteamPage.cpp
         src/ui/pages/SteamPage.h
+        src/ui/pages/UnrealPage.cpp
+        src/ui/pages/UnrealPage.h
         src/ui/MainWindow.cpp
         src/ui/MainWindow.h
         src/ui/widgets/LogPanel.cpp

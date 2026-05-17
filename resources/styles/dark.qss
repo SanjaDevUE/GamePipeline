@@ -173,7 +173,8 @@ QPlainTextEdit#logOutput {
     font-size: 9.5pt;
 }
 
-QProgressBar#steamProgressBar {
+QProgressBar#steamProgressBar,
+QProgressBar#unrealProgressBar {
     background: #101316;
     border: 1px solid #2b323a;
     border-radius: 7px;
@@ -183,16 +184,19 @@ QProgressBar#steamProgressBar {
     text-align: center;
 }
 
-QProgressBar#steamProgressBar::chunk {
+QProgressBar#steamProgressBar::chunk,
+QProgressBar#unrealProgressBar::chunk {
     background: #26724f;
     border-radius: 6px;
 }
 
-QProgressBar#steamProgressBar[state="complete"]::chunk {
+QProgressBar#steamProgressBar[state="complete"]::chunk,
+QProgressBar#unrealProgressBar[state="complete"]::chunk {
     background: #339464;
 }
 
-QProgressBar#steamProgressBar[state="error"]::chunk {
+QProgressBar#steamProgressBar[state="error"]::chunk,
+QProgressBar#unrealProgressBar[state="error"]::chunk {
     background: #934141;
 }
 
