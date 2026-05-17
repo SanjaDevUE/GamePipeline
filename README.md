@@ -15,6 +15,7 @@ GamePipeline is a Windows-first Qt6 desktop Steam uploader for game developers.
 ## Features
 
 - Project management with saved build and deployment settings
+- Separate Projects, Steam Uploader, and Logs views
 - SteamPipe VDF generation and SteamCMD upload workflow
 - Portable Steamworks SDK ContentBuilder tools
 - ContentBuilder updates from a locally downloaded Steamworks SDK

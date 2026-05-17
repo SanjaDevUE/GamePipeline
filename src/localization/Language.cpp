@@ -11,8 +11,43 @@ QString translate(Language language, Text text)
     case Text::Ready:
         return german ? "Bereit" : "Ready";
 
+    case Text::TabProjects:
+        return german ? "Projekte" : "Projects";
+    case Text::TabSteam:
+        return "Steam";
+    case Text::TabLogs:
+        return german ? "Logs" : "Logs";
+
+    case Text::ProjectsTitle:
+        return german ? "Projekte" : "Projects";
     case Text::SaveSettings:
         return german ? "Einstellungen speichern" : "Save Settings";
+    case Text::NewProject:
+        return german ? "Neues Projekt" : "New Project";
+    case Text::SelectBuildFolder:
+        return german ? "Build-Ordner auswaehlen" : "Select Build Folder";
+    case Text::ProjectList:
+        return german ? "Projektliste" : "Project List";
+    case Text::SelectedProject:
+        return german ? "Ausgewaehltes Projekt" : "Selected Project";
+    case Text::ProjectName:
+        return german ? "Projektname" : "Project name";
+    case Text::ProjectRoot:
+        return german ? "Projektordner" : "Project root";
+    case Text::BuildDirectory:
+        return german ? "Build-Ordner" : "Build directory";
+    case Text::Version:
+        return german ? "Version" : "Version";
+    case Text::UploadTargets:
+        return german ? "Upload-Ziele" : "Upload targets";
+    case Text::LastUpdated:
+        return german ? "Zuletzt gespeichert" : "Last saved";
+    case Text::Changelog:
+        return german ? "Aenderungsprotokoll" : "Changelog";
+    case Text::DeleteProject:
+        return german ? "Projekt loeschen" : "Delete Project";
+    case Text::NoProjects:
+        return german ? "Noch keine Projekte gespeichert." : "No projects saved yet.";
     case Text::Project:
         return german ? "Projekt" : "Project";
     case Text::Browse:
@@ -90,6 +125,20 @@ QString translate(Language language, Text text)
     case Text::Clear:
         return german ? "Leeren" : "Clear";
 
+    case Text::LogProjectsBuildFolder:
+        return german ? "Projekte: Build-Ordner ausgewaehlt."
+                      : "Projects: build folder selected.";
+    case Text::LogProjectsSave:
+        return german ? "Projekte: %1 gespeichert."
+                      : "Projects: saved %1.";
+    case Text::LogProjectsSelected:
+        return german ? "Projekte: %1 ausgewaehlt." : "Projects: selected %1.";
+    case Text::LogProjectsCreated:
+        return german ? "Projekte: Neues Projekt angelegt." : "Projects: created new project.";
+    case Text::LogProjectsDeleted:
+        return german ? "Projekte: %1 geloescht." : "Projects: deleted %1.";
+    case Text::LogProjectsNoProjectSelected:
+        return german ? "Projekte: Kein Projekt ausgewaehlt." : "Projects: no project selected.";
     case Text::LogSteamProjectSaved:
         return german ? "Steam: Projektkonfiguration fuer %1 gespeichert."
                       : "Steam: saved project configuration for %1.";

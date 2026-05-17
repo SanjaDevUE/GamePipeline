@@ -34,6 +34,8 @@ qt_add_executable(GamePipeline
         src/localization/Language.h
         src/ui/pages/LogsPage.cpp
         src/ui/pages/LogsPage.h
+        src/ui/pages/ProjectsPage.cpp
+        src/ui/pages/ProjectsPage.h
         src/ui/pages/SteamPage.cpp
         src/ui/pages/SteamPage.h
         src/ui/MainWindow.cpp

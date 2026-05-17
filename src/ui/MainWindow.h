@@ -6,7 +6,8 @@
 
 class LogsPage;
 class ProjectRepository;
-class QSplitter;
+class ProjectsPage;
+class QTabWidget;
 class SteamPage;
 
 class MainWindow final : public QMainWindow
@@ -26,7 +27,8 @@ private:
 
     localization::Language m_language = localization::Language::English;
     ProjectRepository *m_projectRepository = nullptr;
-    QSplitter *m_splitter = nullptr;
+    QTabWidget *m_tabs = nullptr;
+    ProjectsPage *m_projectsPage = nullptr;
     SteamPage *m_steamPage = nullptr;
     LogsPage *m_logsPage = nullptr;
 };
