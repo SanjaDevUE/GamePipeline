@@ -4,15 +4,10 @@
 
 #include <QMainWindow>
 
-class DashboardPage;
-class ItchPage;
 class LogsPage;
 class ProjectRepository;
-class ProjectsPage;
-class SettingsPage;
+class QSplitter;
 class SteamPage;
-class QTabWidget;
-class UnrealPage;
 
 class MainWindow final : public QMainWindow
 {
@@ -23,7 +18,6 @@ public:
 
 private slots:
     void writeLog(const QString &message);
-    void setLanguage(localization::Language language);
 
 private:
     void setupUi();
@@ -32,12 +26,7 @@ private:
 
     localization::Language m_language = localization::Language::English;
     ProjectRepository *m_projectRepository = nullptr;
-    QTabWidget *m_tabs = nullptr;
-    DashboardPage *m_dashboardPage = nullptr;
-    ProjectsPage *m_projectsPage = nullptr;
-    UnrealPage *m_unrealPage = nullptr;
+    QSplitter *m_splitter = nullptr;
     SteamPage *m_steamPage = nullptr;
-    ItchPage *m_itchPage = nullptr;
     LogsPage *m_logsPage = nullptr;
-    SettingsPage *m_settingsPage = nullptr;
 };

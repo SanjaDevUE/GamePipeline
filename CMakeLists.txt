@@ -32,20 +32,10 @@ qt_add_executable(GamePipeline
         src/domain/ProjectRepository.h
         src/localization/Language.cpp
         src/localization/Language.h
-        src/ui/pages/DashboardPage.cpp
-        src/ui/pages/DashboardPage.h
-        src/ui/pages/ItchPage.cpp
-        src/ui/pages/ItchPage.h
         src/ui/pages/LogsPage.cpp
         src/ui/pages/LogsPage.h
-        src/ui/pages/ProjectsPage.cpp
-        src/ui/pages/ProjectsPage.h
-        src/ui/pages/SettingsPage.cpp
-        src/ui/pages/SettingsPage.h
         src/ui/pages/SteamPage.cpp
         src/ui/pages/SteamPage.h
-        src/ui/pages/UnrealPage.cpp
-        src/ui/pages/UnrealPage.h
         src/ui/MainWindow.cpp
         src/ui/MainWindow.h
         src/ui/widgets/LogPanel.cpp

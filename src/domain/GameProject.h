@@ -39,19 +39,6 @@ public:
     [[nodiscard]] const QString &steamPassword() const;
     [[nodiscard]] bool steamSavePassword() const;
     [[nodiscard]] bool steamPreviewBuild() const;
-    [[nodiscard]] const QString &unrealEnginePath() const;
-    [[nodiscard]] const QString &unrealProjectPath() const;
-    [[nodiscard]] const QString &unrealArchiveDirectory() const;
-    [[nodiscard]] const QString &unrealPlatform() const;
-    [[nodiscard]] const QString &unrealConfiguration() const;
-    [[nodiscard]] const QString &unrealAdditionalArguments() const;
-    [[nodiscard]] bool unrealBuild() const;
-    [[nodiscard]] bool unrealCook() const;
-    [[nodiscard]] bool unrealStage() const;
-    [[nodiscard]] bool unrealPak() const;
-    [[nodiscard]] bool unrealArchive() const;
-    [[nodiscard]] bool unrealClean() const;
-    [[nodiscard]] bool unrealDistribution() const;
 
     void setName(QString name);
     void setProjectRoot(QString projectRoot);
@@ -69,19 +56,6 @@ public:
     void setSteamPassword(QString steamPassword);
     void setSteamSavePassword(bool steamSavePassword);
     void setSteamPreviewBuild(bool steamPreviewBuild);
-    void setUnrealEnginePath(QString unrealEnginePath);
-    void setUnrealProjectPath(QString unrealProjectPath);
-    void setUnrealArchiveDirectory(QString unrealArchiveDirectory);
-    void setUnrealPlatform(QString unrealPlatform);
-    void setUnrealConfiguration(QString unrealConfiguration);
-    void setUnrealAdditionalArguments(QString unrealAdditionalArguments);
-    void setUnrealBuild(bool unrealBuild);
-    void setUnrealCook(bool unrealCook);
-    void setUnrealStage(bool unrealStage);
-    void setUnrealPak(bool unrealPak);
-    void setUnrealArchive(bool unrealArchive);
-    void setUnrealClean(bool unrealClean);
-    void setUnrealDistribution(bool unrealDistribution);
 
 private:
     QString m_name;
@@ -100,17 +74,4 @@ private:
     QString m_steamPassword;
     bool m_steamSavePassword = false;
     bool m_steamPreviewBuild = false;
-    QString m_unrealEnginePath;
-    QString m_unrealProjectPath;
-    QString m_unrealArchiveDirectory;
-    QString m_unrealPlatform = QStringLiteral("Win64");
-    QString m_unrealConfiguration = QStringLiteral("Development");
-    QString m_unrealAdditionalArguments;
-    bool m_unrealBuild = true;
-    bool m_unrealCook = true;
-    bool m_unrealStage = true;
-    bool m_unrealPak = true;
-    bool m_unrealArchive = true;
-    bool m_unrealClean = false;
-    bool m_unrealDistribution = false;
 };

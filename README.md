@@ -1,6 +1,6 @@
 # GamePipeline
 
-GamePipeline is a Windows-first Qt6 desktop application for game developers that simplifies managing and uploading game builds for platforms like Steam and itch.io.
+GamePipeline is a Windows-first Qt6 desktop Steam uploader for game developers.
 
 
 <img width="1211" height="801" alt="grafik" src="https://github.com/user-attachments/assets/909981c9-5e08-48cf-aa34-96e2ce55bc70" />
@@ -16,7 +16,8 @@ GamePipeline is a Windows-first Qt6 desktop application for game developers that
 
 - Project management with saved build and deployment settings
 - SteamPipe VDF generation and SteamCMD upload workflow
-- Unreal Engine packaging through RunUAT BuildCookRun
+- Portable Steamworks SDK ContentBuilder tools
+- ContentBuilder updates from a locally downloaded Steamworks SDK
 
 ## Project Layout
 
@@ -31,14 +32,10 @@ resources/
 ## Planned Features
 
 - SteamCMD integration
-- itch.io Butler support
 - Automated build uploads
 - Branch and depot management
 - Version tracking
-- Changelog editor
 - Upload history and logs
-- Discord webhook notifications
-- Multi-platform deployment
 - Build compression and validation
 - Simple and modern UI
 

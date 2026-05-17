@@ -37,6 +37,7 @@ private:
     void removeDepot();
     void browseSelectedDepotPath();
     void browseContentBuilderPath();
+    void updateContentBuilderFromSdk();
     bool persistCurrentProject(bool writeLog);
     bool validateConfiguration();
     bool generateVdfs();
@@ -85,5 +86,6 @@ private:
     QPushButton *m_generateButton = nullptr;
     QPushButton *m_uploadButton = nullptr;
     QPushButton *m_viewLogsFolderButton = nullptr;
+    QPushButton *m_updateSdkButton = nullptr;
     QProcess *m_uploadProcess = nullptr;
 };

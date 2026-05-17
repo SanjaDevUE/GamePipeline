@@ -167,6 +167,166 @@ QString steamCmdPath(const QString &contentBuilderPath)
     return contentBuilderSteamCmd;
 }
 
+bool samePath(const QString &left, const QString &right)
+{
+    const auto cleanLeft = QDir::cleanPath(QFileInfo(left).absoluteFilePath());
+    const auto cleanRight = QDir::cleanPath(QFileInfo(right).absoluteFilePath());
+#ifdef Q_OS_WIN
+    return cleanLeft.compare(cleanRight, Qt::CaseInsensitive) == 0;
+#else
+    return cleanLeft == cleanRight;
+#endif
+}
+
+bool isContentBuilderFolder(const QString &path)
+{
+    return QFileInfo::exists(path)
+        && QFileInfo(path).isDir()
+        && QFileInfo::exists(steamCmdPath(path));
+}
+
+QString contentBuilderFromSteamworksSdk(const QString &path)
+{
+    const auto resolvedPath = QDir::toNativeSeparators(QFileInfo(path).absoluteFilePath());
+    const QStringList candidates = {
+        resolvedPath,
+        QDir(resolvedPath).filePath(QStringLiteral("tools/ContentBuilder")),
+        QDir(resolvedPath).filePath(QStringLiteral("sdk/tools/ContentBuilder")),
+    };
+
+    for (const auto &candidate : candidates) {
+        if (isContentBuilderFolder(candidate)) {
+            return QDir::toNativeSeparators(QFileInfo(candidate).absoluteFilePath());
+        }
+    }
+
+    return {};
+}
+
+bool removePath(const QString &path, QString *errorMessage)
+{
+    const QFileInfo pathInfo(path);
+    if (!pathInfo.exists()) {
+        return true;
+    }
+
+    if (pathInfo.isDir()) {
+        QDir directory(path);
+        if (directory.removeRecursively()) {
+            return true;
+        }
+    } else if (QFile::remove(path)) {
+        return true;
+    }
+
+    if (errorMessage) {
+        *errorMessage = QStringLiteral("Could not remove %1").arg(QDir::toNativeSeparators(path));
+    }
+    return false;
+}
+
+bool copyDirectoryTree(const QString &sourcePath, const QString &targetPath, QString *errorMessage)
+{
+    QDir sourceDirectory(sourcePath);
+    if (!sourceDirectory.exists()) {
+        if (errorMessage) {
+            *errorMessage = QStringLiteral("Source folder does not exist: %1").arg(QDir::toNativeSeparators(sourcePath));
+        }
+        return false;
+    }
+
+    if (!QDir().mkpath(targetPath)) {
+        if (errorMessage) {
+            *errorMessage = QStringLiteral("Could not create folder: %1").arg(QDir::toNativeSeparators(targetPath));
+        }
+        return false;
+    }
+
+    const auto entries = sourceDirectory.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
+    for (const auto &entry : entries) {
+        const auto targetEntryPath = QDir(targetPath).filePath(entry.fileName());
+        if (entry.isDir()) {
+            if (!copyDirectoryTree(entry.absoluteFilePath(), targetEntryPath, errorMessage)) {
+                return false;
+            }
+            continue;
+        }
+
+        if (QFileInfo::exists(targetEntryPath) && !QFile::remove(targetEntryPath)) {
+            if (errorMessage) {
+                *errorMessage = QStringLiteral("Could not overwrite %1").arg(QDir::toNativeSeparators(targetEntryPath));
+            }
+            return false;
+        }
+        if (!QFile::copy(entry.absoluteFilePath(), targetEntryPath)) {
+            if (errorMessage) {
+                *errorMessage = QStringLiteral("Could not copy %1 to %2")
+                                    .arg(QDir::toNativeSeparators(entry.absoluteFilePath()),
+                                         QDir::toNativeSeparators(targetEntryPath));
+            }
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool updateContentBuilderFiles(const QString &sourcePath, const QString &targetPath, QString *errorMessage)
+{
+    if (samePath(sourcePath, targetPath)) {
+        if (errorMessage) {
+            *errorMessage = QStringLiteral("Source and target ContentBuilder folders are the same.");
+        }
+        return false;
+    }
+
+    QDir sourceDirectory(sourcePath);
+    if (!sourceDirectory.exists()) {
+        if (errorMessage) {
+            *errorMessage = QStringLiteral("Source ContentBuilder folder does not exist.");
+        }
+        return false;
+    }
+    if (!QDir().mkpath(targetPath)) {
+        if (errorMessage) {
+            *errorMessage = QStringLiteral("Could not create target ContentBuilder folder.");
+        }
+        return false;
+    }
+
+    const QStringList preservedDirectories = {
+        QStringLiteral("content"),
+        QStringLiteral("output"),
+        QStringLiteral("scripts"),
+    };
+    const auto entries = sourceDirectory.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
+    for (const auto &entry : entries) {
+        const auto targetEntryPath = QDir(targetPath).filePath(entry.fileName());
+        if (entry.isDir() && preservedDirectories.contains(entry.fileName(), Qt::CaseInsensitive) && QFileInfo::exists(targetEntryPath)) {
+            continue;
+        }
+
+        if (!removePath(targetEntryPath, errorMessage)) {
+            return false;
+        }
+        if (entry.isDir()) {
+            if (!copyDirectoryTree(entry.absoluteFilePath(), targetEntryPath, errorMessage)) {
+                return false;
+            }
+            continue;
+        }
+
+        if (!QFile::copy(entry.absoluteFilePath(), targetEntryPath)) {
+            if (errorMessage) {
+                *errorMessage = QStringLiteral("Could not copy %1").arg(QDir::toNativeSeparators(entry.absoluteFilePath()));
+            }
+            return false;
+        }
+    }
+
+    return true;
+}
+
 QString defaultContentBuilderPath()
 {
     for (const auto &root : portableRootCandidates()) {
@@ -419,7 +579,9 @@ SteamPage::SteamPage(ProjectRepository *repository, QWidget *parent)
 
     auto *configButtons = new QHBoxLayout;
     configButtons->addStretch(1);
+    m_updateSdkButton = createActionButton({});
     m_viewLogsFolderButton = createActionButton({});
+    configButtons->addWidget(m_updateSdkButton);
     configButtons->addWidget(m_viewLogsFolderButton);
     configLayout->addLayout(configButtons);
     layout->addWidget(configPanel);
@@ -439,6 +601,7 @@ SteamPage::SteamPage(ProjectRepository *repository, QWidget *parent)
         generateVdfs();
     });
     connect(m_uploadButton, &QPushButton::clicked, this, &SteamPage::uploadToSteam);
+    connect(m_updateSdkButton, &QPushButton::clicked, this, &SteamPage::updateContentBuilderFromSdk);
     connect(m_viewLogsFolderButton, &QPushButton::clicked, this, &SteamPage::openLogsFolder);
     connect(m_showPasswordCheckBox, &QCheckBox::toggled, this, &SteamPage::updatePasswordEchoMode);
     connect(m_uploadProcess, &QProcess::readyReadStandardOutput, this, &SteamPage::appendProcessOutput);
@@ -610,6 +773,7 @@ void SteamPage::setSteamFormEnabled(bool enabled)
     m_browseContentBuilderButton->setEnabled(enabled);
     m_generateButton->setEnabled(enabled);
     m_uploadButton->setEnabled(enabled);
+    m_updateSdkButton->setEnabled(enabled);
     m_viewLogsFolderButton->setEnabled(enabled);
 }
 
@@ -733,6 +897,39 @@ void SteamPage::browseContentBuilderPath()
     }
 
     m_contentBuilderPathEdit->setText(QDir::toNativeSeparators(folder));
+}
+
+void SteamPage::updateContentBuilderFromSdk()
+{
+    const auto currentContentBuilderPath = m_contentBuilderPathEdit->text().trimmed().isEmpty()
+                                               ? defaultContentBuilderPath()
+                                               : resolvePortablePath(m_contentBuilderPathEdit->text().trimmed());
+    const auto selectedPath = QFileDialog::getExistingDirectory(this,
+                                                                l10n::translate(m_language, l10n::Text::SteamworksSdkPath),
+                                                                QFileInfo(currentContentBuilderPath).absolutePath());
+    if (selectedPath.isEmpty()) {
+        return;
+    }
+
+    const auto sourceContentBuilderPath = contentBuilderFromSteamworksSdk(selectedPath);
+    if (sourceContentBuilderPath.isEmpty()) {
+        const auto message = QStringLiteral("Selected folder does not contain sdk/tools/ContentBuilder with steamcmd.exe.");
+        appendUploadLog(message);
+        emit logRequested(l10n::translate(m_language, l10n::Text::LogSteamSdkUpdateFailed).arg(message));
+        return;
+    }
+
+    QString errorMessage;
+    if (!updateContentBuilderFiles(sourceContentBuilderPath, currentContentBuilderPath, &errorMessage)) {
+        appendUploadLog(errorMessage);
+        emit logRequested(l10n::translate(m_language, l10n::Text::LogSteamSdkUpdateFailed).arg(errorMessage));
+        return;
+    }
+
+    m_contentBuilderPathEdit->setText(QDir::toNativeSeparators(currentContentBuilderPath));
+    appendUploadLog(QStringLiteral("Updated ContentBuilder from %1").arg(QDir::toNativeSeparators(sourceContentBuilderPath)));
+    emit logRequested(l10n::translate(m_language, l10n::Text::LogSteamSdkUpdated)
+                          .arg(QDir::toNativeSeparators(sourceContentBuilderPath)));
 }
 
 bool SteamPage::validateConfiguration()
@@ -1021,6 +1218,7 @@ void SteamPage::updateTexts()
     m_browseContentBuilderButton->setText(l10n::translate(m_language, l10n::Text::Browse));
     m_generateButton->setText(l10n::translate(m_language, l10n::Text::GenerateVdf));
     m_uploadButton->setText(l10n::translate(m_language, l10n::Text::UploadToSteam));
+    m_updateSdkButton->setText(l10n::translate(m_language, l10n::Text::UpdateSteamSdk));
     m_viewLogsFolderButton->setText(l10n::translate(m_language, l10n::Text::ViewLogsFolder));
     m_depotTable->setHorizontalHeaderLabels({l10n::translate(m_language, l10n::Text::DepotId),
                                              l10n::translate(m_language, l10n::Text::BuildPath)});
