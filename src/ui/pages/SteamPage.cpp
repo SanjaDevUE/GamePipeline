@@ -128,8 +128,8 @@ QStringList portableRootCandidates()
 {
     QStringList roots;
     const QStringList basePaths = {
-        QDir::currentPath(),
         QCoreApplication::applicationDirPath(),
+        QDir::currentPath(),
     };
 
     auto addRoot = [&roots](const QString &path) {
@@ -150,6 +150,78 @@ QStringList portableRootCandidates()
     }
 
     return roots;
+}
+
+bool isFileSystemRoot(const QString &path)
+{
+    const QDir directory(path);
+    const auto absolutePath = QDir::cleanPath(directory.absolutePath());
+    const auto rootPath = QDir::cleanPath(directory.rootPath());
+#ifdef Q_OS_WIN
+    return absolutePath.compare(rootPath, Qt::CaseInsensitive) == 0;
+#else
+    return absolutePath == rootPath;
+#endif
+}
+
+bool canStoreAsPortableRelativePath(const QString &relativePath)
+{
+    const auto normalizedPath = QDir::fromNativeSeparators(relativePath);
+    return !normalizedPath.isEmpty()
+        && normalizedPath != QStringLiteral(".")
+        && normalizedPath != QStringLiteral("..")
+        && !normalizedPath.startsWith(QStringLiteral("../"))
+        && !QFileInfo(normalizedPath).isAbsolute();
+}
+
+QString portableFallbackRoot(const QStringList &roots)
+{
+    for (const auto &root : roots) {
+        if (!isFileSystemRoot(root)) {
+            return root;
+        }
+    }
+
+    return roots.isEmpty() ? QCoreApplication::applicationDirPath() : roots.first();
+}
+
+QStringList volumeRootCandidates()
+{
+    QStringList roots;
+    const QStringList basePaths = {
+        QCoreApplication::applicationDirPath(),
+        QDir::currentPath(),
+        QDir::homePath(),
+    };
+
+    for (const auto &basePath : basePaths) {
+        const auto rootPath = QDir::cleanPath(QDir(basePath).rootPath());
+        if (!roots.contains(rootPath, Qt::CaseInsensitive)) {
+            roots.append(rootPath);
+        }
+    }
+
+    return roots;
+}
+
+QString existingVolumeRootPath(QString relativePath)
+{
+    relativePath = QDir::fromNativeSeparators(relativePath.trimmed());
+    while (relativePath.startsWith(QStringLiteral("/"))) {
+        relativePath.remove(0, 1);
+    }
+    if (relativePath.isEmpty() || QFileInfo(relativePath).isAbsolute()) {
+        return {};
+    }
+
+    for (const auto &root : volumeRootCandidates()) {
+        const auto candidatePath = QDir(root).filePath(relativePath);
+        if (QFileInfo::exists(candidatePath)) {
+            return QDir::toNativeSeparators(QFileInfo(candidatePath).absoluteFilePath());
+        }
+    }
+
+    return {};
 }
 
 QString steamCmdPath(const QString &contentBuilderPath)
@@ -347,6 +419,7 @@ QString resolvePortablePath(const QString &path)
     }
 
     const auto normalizedPath = QDir::fromNativeSeparators(trimmedPath);
+    const auto roots = portableRootCandidates();
     if (QFileInfo(normalizedPath).isAbsolute()) {
         if (!QFileInfo::exists(normalizedPath)
             && normalizedPath.contains(QStringLiteral("/Steam/ContentBuilder"), Qt::CaseInsensitive)) {
@@ -356,24 +429,31 @@ QString resolvePortablePath(const QString &path)
         return QDir::toNativeSeparators(QFileInfo(normalizedPath).absoluteFilePath());
     }
 
-    for (const auto &root : portableRootCandidates()) {
+    for (const auto &root : roots) {
         const auto candidatePath = QDir(root).filePath(normalizedPath);
         if (QFileInfo::exists(candidatePath)) {
             return QDir::toNativeSeparators(QFileInfo(candidatePath).absoluteFilePath());
         }
     }
 
-    return QDir::toNativeSeparators(QFileInfo(QDir(portableRootCandidates().first()).filePath(normalizedPath)).absoluteFilePath());
+    const auto volumeRootPath = existingVolumeRootPath(normalizedPath);
+    if (!volumeRootPath.isEmpty()) {
+        return volumeRootPath;
+    }
+
+    return QDir::toNativeSeparators(QFileInfo(QDir(portableFallbackRoot(roots)).filePath(normalizedPath)).absoluteFilePath());
 }
 
 QString makePortablePath(const QString &path)
 {
     const auto absolutePath = QFileInfo(resolvePortablePath(path)).absoluteFilePath();
     for (const auto &root : portableRootCandidates()) {
+        if (isFileSystemRoot(root)) {
+            continue;
+        }
+
         const auto relativePath = QDir(root).relativeFilePath(absolutePath);
-        if (!relativePath.startsWith(QStringLiteral(".."))
-            && !QFileInfo(relativePath).isAbsolute()
-            && relativePath != QStringLiteral(".")) {
+        if (canStoreAsPortableRelativePath(relativePath)) {
             return QDir::toNativeSeparators(relativePath);
         }
     }
@@ -965,6 +1045,14 @@ bool SteamPage::validateConfiguration()
         appendUploadLog(QStringLiteral("Missing configuration: %1").arg(missing.join(QStringLiteral(", "))));
         setProgressError(l10n::translate(m_language, l10n::Text::SteamProgressFailed));
         return false;
+    }
+
+    for (const auto &depot : depots) {
+        if (!QFileInfo(depot.buildPath).isDir()) {
+            appendUploadLog(QStringLiteral("Build path does not exist: %1").arg(QDir::toNativeSeparators(depot.buildPath)));
+            setProgressError(l10n::translate(m_language, l10n::Text::SteamProgressFailed));
+            return false;
+        }
     }
 
     appendUploadLog(QStringLiteral("Steam configuration is complete."));
