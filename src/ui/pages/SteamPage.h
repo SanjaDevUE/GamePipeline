@@ -45,6 +45,7 @@ private:
     void openLogsFolder();
     void appendUploadLog(const QString &message);
     void appendProcessOutput();
+    void updateUploadProgressFromOutput(const QString &output);
     void setProgress(int value, const QString &text, const QString &state = QStringLiteral("active"));
     void setProgressBusy(const QString &text);
     void setProgressError(const QString &text);
