@@ -20,6 +20,7 @@
 #include <QProgressBar>
 #include <QProcess>
 #include <QPushButton>
+#include <QRegularExpression>
 #include <QSignalBlocker>
 #include <QSizePolicy>
 #include <QStyle>
@@ -29,12 +30,16 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
+#include <optional>
+
 namespace l10n = localization;
 
 namespace {
 constexpr int DepotIdColumnWidth = 170;
 constexpr int DepotRowHeight = 44;
 constexpr int VisibleDepotRows = 3;
+constexpr int UploadProgressStart = 70;
+constexpr int UploadProgressComplete = 99;
 
 QLineEdit *createInput(const QString &placeholder = {})
 {
@@ -72,6 +77,49 @@ QLabel *createFieldLabel()
     auto *label = new QLabel;
     label->setObjectName("fieldLabel");
     return label;
+}
+
+int uploadProgressValue(double steamPercent)
+{
+    const auto boundedPercent = qBound(0.0, steamPercent, 100.0);
+    const auto uploadSpan = UploadProgressComplete - UploadProgressStart;
+    return qBound(UploadProgressStart,
+                  UploadProgressStart + qRound((boundedPercent / 100.0) * uploadSpan),
+                  UploadProgressComplete);
+}
+
+std::optional<double> latestSteamProgressPercent(const QString &output)
+{
+    static const QRegularExpression percentPattern(QStringLiteral(R"((\d{1,3}(?:[.,]\d+)?)\s*%)"));
+    static const QRegularExpression progressPattern(
+        QStringLiteral(R"(\bprogress:\s*(\d{1,3}(?:[.,]\d+)?))"),
+        QRegularExpression::CaseInsensitiveOption);
+
+    std::optional<double> latestProgress;
+    qsizetype latestPosition = -1;
+    const auto collectProgress = [&](const QRegularExpression &pattern) {
+        auto matches = pattern.globalMatch(output);
+        while (matches.hasNext()) {
+            const auto match = matches.next();
+            bool ok = false;
+            auto valueText = match.captured(1);
+            valueText.replace(',', '.');
+            const auto value = valueText.toDouble(&ok);
+            if (!ok || value < 0.0 || value > 100.0) {
+                continue;
+            }
+
+            const auto position = match.capturedStart(1);
+            if (position > latestPosition) {
+                latestPosition = position;
+                latestProgress = value;
+            }
+        }
+    };
+
+    collectProgress(percentPattern);
+    collectProgress(progressPattern);
+    return latestProgress;
 }
 
 QString tableText(const QTableWidget *table, int row, int column)
@@ -1220,6 +1268,23 @@ void SteamPage::appendProcessOutput()
     if (!output.trimmed().isEmpty()) {
         appendUploadLog(output.trimmed());
     }
+    updateUploadProgressFromOutput(output);
+}
+
+void SteamPage::updateUploadProgressFromOutput(const QString &output)
+{
+    if (m_uploadProcess->state() == QProcess::NotRunning) {
+        return;
+    }
+
+    const auto progress = latestSteamProgressPercent(output);
+    if (!progress.has_value()) {
+        return;
+    }
+
+    const auto nextValue = uploadProgressValue(*progress);
+    setProgress(qMax(m_progressBar->value(), nextValue),
+                l10n::translate(m_language, l10n::Text::SteamProgressUploading));
 }
 
 void SteamPage::setProgress(int value, const QString &text, const QString &state)
